@@ -6,7 +6,8 @@ This Python project aims to provide a simple way to convert video files to audio
 
 1. Clone this repository or download the source code.
 2. Make sure you have Python installed on your system.
-3. Run the `run.sh` script:
+3. Put MP4 files in `assets` folder.
+4. Run the `run.sh` script:
 
     ```bash
     ./run.sh
