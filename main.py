@@ -1,5 +1,9 @@
 from moviepy.editor import VideoFileClip
 import os
+import speech_recognition as sr
+from pydub import AudioSegment
+
+r = sr.Recognizer()
 
 input_folder = 'assets'
 output_folder = 'out'
@@ -7,17 +11,15 @@ output_folder = 'out'
 mp4_files = [f for f in os.listdir(input_folder) if f.endswith('.mp4')]
 
 for mp4_file in mp4_files:
-  # Load the video clip
-  video_clip = VideoFileClip(os.path.join(input_folder, mp4_file))
+    audio = AudioSegment.from_file(os.path.join(input_folder, mp4_file), format="mp4")
+    audio.export(os.path.join(output_folder, mp4_file.replace('.mp4', '.wav')), format="wav")
 
-  # Extract the audio from the video clip
-  audio_clip = video_clip.audio
+audio_files = [f for f in os.listdir(output_folder) if f.endswith('.wav')]
 
-  # Write the audio to a separate file
-  audio_clip.write_audiofile(os.path.join(output_folder, mp4_file.replace('.mp4', '.mp3')))
-
-  # Close the video and audio clips
-  audio_clip.close()
-  video_clip.close()
-
-print("Audio extraction successful!")
+for file in audio_files:
+    with sr.AudioFile(os.path.join(output_folder, file)) as source:
+        audio = r.record(source)
+        text = r.recognize_google(audio)
+        text_file = open(os.path.join(output_folder, file.replace('.wav', '.txt')), 'w', encoding='utf-8')
+        text_file.write(text)
+        text_file.close()
