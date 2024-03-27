@@ -1,3 +1,4 @@
 assets/**/*.mp4
-out/**/*.mp3
+out/**/*
+!out/.gitkeep
 .venv
